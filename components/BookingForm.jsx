@@ -16,6 +16,8 @@ export default function BookingForm() {
     serviceType: '',
     brand: '',
     area: '',
+    address: '',
+    landmark: '',
     date: '',
     issue: '',
   });
@@ -38,6 +40,8 @@ export default function BookingForm() {
       `*Service:* ${form.serviceType}%0A` +
       `*Brand:* ${form.brand || '-'}%0A` +
       `*Area:* ${form.area}%0A` +
+      `*Exact Address:* ${form.address}%0A` +
+      `*Nearest Landmark:* ${form.landmark || '-'}%0A` +
       `*Preferred Date:* ${form.date || '-'}%0A` +
       `*Issue:* ${form.issue || '-'}`;
     window.open(`https://wa.me/${site.whatsappNumber}?text=${msg}`, '_blank');
@@ -96,6 +100,30 @@ export default function BookingForm() {
           </select>
         </div>
         <div>
+  <label htmlFor="b-address" className={labelCls}>Exact Address / Location *</label>
+  <input
+    id="b-address"
+    name="address"
+    required
+    value={form.address}
+    onChange={update}
+    placeholder="House, street, block, town"
+    className={field}
+  />
+</div>
+
+<div>
+  <label htmlFor="b-landmark" className={labelCls}>Nearest Landmark</label>
+  <input
+    id="b-landmark"
+    name="landmark"
+    value={form.landmark}
+    onChange={update}
+    placeholder="e.g. Near Emporium Mall"
+    className={field}
+  />
+</div>
+        <div>
           <label htmlFor="b-date" className={labelCls}>Preferred Date</label>
           <input id="b-date" name="date" type="date" value={form.date} onChange={update} className={field} />
         </div>
@@ -111,7 +139,7 @@ export default function BookingForm() {
         <MessageCircle className="h-4 w-4 opacity-80" />
       </button>
       <p className="mt-3 text-center text-xs text-muted">
-        Submitting opens WhatsApp with your details pre-filled — quick and easy.
+        Submitting opens WhatsApp with your details pre-filled. You can also share live location on WhatsApp.
       </p>
     </form>
   );
