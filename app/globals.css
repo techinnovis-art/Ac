@@ -1,0 +1,256 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===========================================================================
+   THEME TOKENS
+   Dark is the default (premium look). Light theme activates when <html> has
+   NO ".dark" class. We default-apply .dark in the ThemeProvider.
+   =========================================================================== */
+:root {
+  /* Light theme */
+  --bg: 245 247 251;        /* #F5F7FB */
+  --surface: 255 255 255;   /* #FFFFFF */
+  --card: 255 255 255;
+  --border: 16 24 40;       /* used at low alpha */
+  --fg: 10 14 26;           /* #0A0E1A */
+  --muted: 71 85 105;       /* slate-600 */
+  --card-alpha: 1;
+  --border-alpha: 0.08;
+  --hero-glow: 0.35;
+}
+
+.dark {
+  /* Dark theme (default) */
+  --bg: 5 8 16;             /* near-black navy #050810 */
+  --surface: 10 14 26;      /* #0A0E1A */
+  --card: 18 24 41;         /* #121829 */
+  --border: 148 163 184;    /* slate-400 used at low alpha */
+  --fg: 248 250 252;        /* #F8FAFC */
+  --muted: 148 163 184;     /* slate-400 */
+  --card-alpha: 0.6;
+  --border-alpha: 0.1;
+  --hero-glow: 0.6;
+}
+
+* {
+  border-color: rgb(var(--border) / var(--border-alpha));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: rgb(var(--bg));
+  color: rgb(var(--fg));
+  font-feature-settings: 'ss01', 'cv01';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Selection color */
+::selection {
+  background: rgb(45 127 255 / 0.3);
+  color: rgb(var(--fg));
+}
+
+/* Custom scrollbar (dark friendly) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(45 127 255 / 0.4);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(45 127 255 / 0.6);
+}
+
+@layer components {
+  /* Glassmorphism card */
+  .glass {
+    background: rgb(var(--card) / var(--card-alpha));
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgb(var(--border) / var(--border-alpha));
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    background-image: linear-gradient(100deg, #5C9BFF 0%, #22D3EE 55%, #FF8A3D 110%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .text-gradient-blue {
+    background-image: linear-gradient(100deg, #5C9BFF 0%, #22D3EE 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Primary button */
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-semibold text-white transition-transform duration-200 will-change-transform;
+    background-image: linear-gradient(120deg, #1E63FF, #2D7FFF 45%, #22D3EE);
+    box-shadow: 0 10px 30px -8px rgb(45 127 255 / 0.6);
+  }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  /* Ember / WhatsApp-ish secondary */
+  .btn-ember {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-semibold text-white transition-transform duration-200 will-change-transform;
+    background-image: linear-gradient(120deg, #F26A0A, #FF7A1A 60%, #FF8A3D);
+    box-shadow: 0 10px 30px -8px rgb(255 122 26 / 0.55);
+  }
+  .btn-ember:hover { transform: translateY(-2px); }
+
+  .btn-whatsapp {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-semibold text-white transition-transform duration-200 will-change-transform;
+    background-image: linear-gradient(120deg, #1FA855, #25D366);
+    box-shadow: 0 10px 30px -8px rgb(37 211 102 / 0.55);
+  }
+  .btn-whatsapp:hover { transform: translateY(-2px); }
+
+  /* Ghost / outline button */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-semibold transition-colors duration-200;
+    color: rgb(var(--fg));
+    border: 1px solid rgb(var(--border) / 0.25);
+    background: rgb(var(--card) / var(--card-alpha));
+  }
+  .btn-ghost:hover {
+    border-color: rgb(45 127 255 / 0.5);
+    color: #5C9BFF;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em];
+    border-color: rgb(45 127 255 / 0.3);
+    color: #5C9BFF;
+    background: rgb(45 127 255 / 0.08);
+  }
+}
+
+@layer utilities {
+  .section {
+    @apply py-20 md:py-28;
+  }
+  .balance {
+    text-wrap: balance;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===========================================================================
+   PREMIUM ANIMATION UPGRADES (added by enhancement pass)
+   =========================================================================== */
+
+/* GlowCard cursor spotlight — driven by --mx / --my set on pointer move */
+.glow-card__spot {
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 50%),
+    rgb(45 127 255 / 0.16),
+    rgb(34 211 238 / 0.08) 40%,
+    transparent 65%
+  );
+}
+
+/* Animated gradient background (hero / accent bands) */
+.animated-gradient {
+  background-size: 220% 220%;
+  animation: gradient-pan 16s ease infinite;
+}
+@keyframes gradient-pan {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Sweeping shine for primary CTAs */
+@layer components {
+  .btn-primary,
+  .btn-ember,
+  .btn-whatsapp {
+    overflow: hidden;
+  }
+  .btn-primary::after,
+  .btn-ember::after,
+  .btn-whatsapp::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-130%) skewX(-18deg);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(255 255 255 / 0.35),
+      transparent
+    );
+    transition: transform 0.7s ease;
+    pointer-events: none;
+  }
+  .btn-primary:hover::after,
+  .btn-ember:hover::after,
+  .btn-whatsapp:hover::after {
+    transform: translateX(130%) skewX(-18deg);
+  }
+
+  /* CTA hover glow */
+  .btn-primary:hover { box-shadow: 0 14px 44px -8px rgb(45 127 255 / 0.8); }
+  .btn-ember:hover { box-shadow: 0 14px 44px -8px rgb(255 122 26 / 0.75); }
+  .btn-whatsapp:hover { box-shadow: 0 14px 44px -8px rgb(37 211 102 / 0.75); }
+}
+
+/* Soft glow pulse for the floating/sticky CTAs */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 10px 30px -6px rgb(37 211 102 / 0.55); }
+  50% { box-shadow: 0 10px 42px -2px rgb(37 211 102 / 0.85); }
+}
+.glow-pulse { animation: glow-pulse 2.4s ease-in-out infinite; }
+
+/* Form control focus glow (premium dark inputs) */
+.glass input:focus,
+.glass textarea:focus,
+.glass select:focus {
+  box-shadow: 0 0 0 3px rgb(45 127 255 / 0.18), 0 0 30px -6px rgb(45 127 255 / 0.55);
+}
+
+/* Animated nav underline on hover for non-active links */
+.nav-underline {
+  position: relative;
+}
+.nav-underline::after {
+  content: '';
+  position: absolute;
+  left: 0.875rem;
+  right: 0.875rem;
+  bottom: -2px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2d7fff, #22d3ee);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.nav-underline:hover::after {
+  transform: scaleX(1);
+}
